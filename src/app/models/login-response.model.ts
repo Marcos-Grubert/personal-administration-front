@@ -1,0 +1,7 @@
+export interface LoginResponse {
+  token: string;
+  refreshToken: string;
+  expiresAt: string;
+  refreshTokenExpiresAt: string;
+  type: string;
+}

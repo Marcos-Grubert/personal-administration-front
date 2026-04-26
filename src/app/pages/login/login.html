@@ -1,0 +1,20 @@
+<div class="login-container">
+  <div class="card">
+    <h2>Personal Admin</h2>
+    <p>Insira suas credenciais</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" formControlName="email" placeholder="seu@email.com">
+      </div>
+
+      <div class="input-group">
+        <label for="password">Senha</label>
+        <input id="password" type="password" formControlName="password" placeholder="******">
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+    </form>
+  </div>
+</div>
