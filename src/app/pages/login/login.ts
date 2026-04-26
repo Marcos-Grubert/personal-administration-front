@@ -32,10 +32,17 @@ export class LoginComponent {
         next: (res) => {
           console.log('Login ok!', res);
           alert('Autenticado com sucesso!');
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-          console.error('Erro no login', err);
-          alert('Falha ao entrar. Verifique usuário e senha.');
+          if(err.status === 401) {
+            const message = err.error?.message || 'Não autorizado.';
+            console.warn('Erro 401 identificado:', message);
+            alert(`Falha no acesso: ${message}`);
+          } else {
+            console.error('Outro erro ocorreu: ', err);
+            alert('Ocorreu um erro inesperado no servidor.');
+          }
         }
       });
     }

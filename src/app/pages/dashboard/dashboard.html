@@ -1,0 +1,82 @@
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <div class="logo">
+      <h2>Administração Pessoal</h2>
+    </div>
+    
+    <nav class="menu-nav">
+      
+      <div class="menu-group" [class.active]="menuCadastros">
+        <div class="group-title" (click)="menuCadastros = !menuCadastros">
+          <span>Cadastros</span>
+          <i class="arrow"></i>
+        </div>
+        <div class="dropdown-content">
+          <ul class="list-links">
+            <li><a routerLink="/clientes">Clientes</a></li>
+            <li><a routerLink="/fornecedores">Fornecedores</a></li>
+          </ul>
+
+          <div class="sub-menu-item" [class.active]="subMenuUsuarios">
+            <div class="sub-title" (click)="subMenuUsuarios = !subMenuUsuarios">
+              <span>Usuários</span>
+              <i class="arrow-small"></i>
+            </div>
+            <ul class="sub-dropdown-content">
+              <li><a routerLink="/usuarios/cadastro">Cadastro</a></li>
+              <li><a routerLink="/usuarios/consulta">Consulta</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-group" [class.active]="menuFinancas">
+        <div class="group-title" (click)="menuFinancas = !menuFinancas">
+          <span>Finanças</span>
+          <i class="arrow"></i>
+        </div>
+        
+        <div class="dropdown-content">
+          <div class="sub-menu-item" [class.active]="subMenuReceber">
+            <div class="sub-title" (click)="subMenuReceber = !subMenuReceber">
+              <span>Contas à Receber</span>
+              <i class="arrow-small"></i>
+            </div>
+            <ul class="sub-dropdown-content">
+              <li><a routerLink="/receber/cadastro">Cadastro</a></li>
+              <li><a routerLink="/receber/consulta">Consulta</a></li>
+            </ul>
+          </div>
+
+          <div class="sub-menu-item" [class.active]="subMenuPagar">
+            <div class="sub-title" (click)="subMenuPagar = !subMenuPagar">
+              <span>Contas à Pagar</span>
+              <i class="arrow-small"></i>
+            </div>
+            <ul class="sub-dropdown-content">
+              <li><a routerLink="/pagar/cadastro">Cadastro</a></li>
+              <li><a routerLink="/pagar/consulta">Consulta</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-bar">
+      <div class="user-info">
+        <span>Bem-vindo, <strong>{{ userName }}</strong></span>
+        <button (click)="onLogout()" class="btn-logout">Sair</button>
+      </div>
+    </header>
+
+    <section class="content">
+      <div class="welcome-card">
+        <h1>Painel de Controle</h1>
+        <p>Selecione uma opção no menu ao lado para gerenciar sua administração.</p>
+      </div>
+    </section>
+  </main>
+</div>

@@ -13,8 +13,8 @@
     width: 100%;
     max-width: 360px;
 
-    h2 { text-align: center; margin-bottom: 0.5rem; color: #1a73e8; font-family: sans-serif; }
-    p { text-align: center; margin-bottom: 2rem; color: #666; font-size: 0.9rem; }
+    h2 { text-align: center; margin-bottom: 0.5rem; color: blue; font-family: sans-serif;font-weight: bold; }
+    p { text-align: center; margin-bottom: 2rem; color: gray; font-size: 0.9rem;font-weight: bold; }
 
     .input-group {
       margin-bottom: 1.2rem;
@@ -25,7 +25,7 @@
         border: 1px solid #ccc;
         border-radius: 6px;
         box-sizing: border-box;
-        &:focus { border-color: #1a73e8; outline: none; }
+        &:focus { border-color: green; outline: none; }
       }
     }
 

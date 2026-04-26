@@ -1,24 +1,42 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // Ajuste a URL se o seu Spring Boot estiver em outra porta ou rota
-  private readonly API = 'http://localhost:8080/auth/login';
+  // URL da sua API (ex: Spring Boot rodando no 8080)
+  private readonly API_URL = 'http://localhost:8080/auth/login';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  login(loginData: any): Observable<any> {
-    return this.http.post<any>(this.API, loginData).pipe(
-      tap(res => {
-        // Guarda o token no navegador para as próximas chamadas
-        if (res.token) {
-          localStorage.setItem('access_token', res.token);
+  login(credentials: any): Observable<any> {
+    return this.http.post<any>(this.API_URL, credentials).pipe(
+      tap(response => {
+        // Se a API retornar um objeto com o token (ex: { token: '...' })
+        if (response && response.token) {
+          this.setToken(response.token);
         }
       })
     );
+  }
+
+  // Métodos auxiliares que o mercado usa
+  private setToken(token: string): void {
+    localStorage.setItem('auth_token', token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
+  }
+
+  logout(): void {
+    localStorage.removeItem('auth_token');
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }
