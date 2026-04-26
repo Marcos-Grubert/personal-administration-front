@@ -1,0 +1,27 @@
+<div class="cadastro-container">
+  <div class="card-form">
+    <h2>Novo Usuário</h2>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-group">
+        <label for="name">Nome Completo</label>
+        <input id="name" type="text" formControlName="name" placeholder="Ex: Marcos Grubert">
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" formControlName="email" placeholder="marcos.grubert@gmail.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input id="password" type="password" formControlName="password" placeholder="Mínimo 6 caracteres">
+      </div>
+
+      <button type="submit" [disabled]="userForm.invalid" class="btn-save">
+        Salvar Usuário
+      </button>
+
+    </form>
+  </div>
+</div>

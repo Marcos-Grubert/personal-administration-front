@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login';
-import { DashboardComponent } from './pages/dashboard/dashboard'; // Importe seu dashboard
-import { authGuard } from './guards/auth-guard'; // O Guard que protege a rota
+import { DashboardComponent } from './pages/dashboard/dashboard';
+import { UserCadastroComponent } from './pages/register/users/user'; // Importe o componente que você criou
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -11,7 +12,13 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard] // <--- Aqui está o segredo profissional
+    canActivate: [authGuard]
+  },
+  // NOVA ROTA: Cadastro de Usuários
+  {
+    path: 'usuarios/cadastro',
+    component: UserCadastroComponent,
+    canActivate: [authGuard] // Também protegido pelo guard
   },
   {
     path: '',
