@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserService } from '../../../services/register/users/user';
+import { UserService } from '../../../../services/register/users/register/user';
 
 @Component({
   selector: 'app-user-cadastro',
@@ -23,7 +23,7 @@ export class UserCadastroComponent {
 
   onSubmit() {
     if (this.userForm.valid) {
-      this.userService.cadastrar(this.userForm.value).subscribe({
+      this.userService.register(this.userForm.value).subscribe({
         next: (response) => {
           alert('Usuário cadastrado com sucesso!');
           this.userForm.reset();
