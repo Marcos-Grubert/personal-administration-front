@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+/* --- ESTRUTURA DE LAYOUT GLOBAL CORRIGIDA --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Evita barras de rolagem duplas na janela principal */
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f4f7f6;
+  align-items: stretch; /* Força os filhos (sidebar e main-content) a esticarem até o fim */
+}
+
+.sidebar {
+  height: 100%; /* Passa a ocupar 100% do container pai, que já tem 100vh */
+  /* O restante do CSS interno da sua sidebar continua igual */
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  padding: 40px;
+  flex: 1;
+  overflow-y: auto; /* A barra de rolagem vertical só vai aparecer aqui dentro quando o form/tabela crescer */
+}

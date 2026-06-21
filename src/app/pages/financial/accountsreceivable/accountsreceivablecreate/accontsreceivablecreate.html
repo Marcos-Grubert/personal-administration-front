@@ -1,0 +1,81 @@
+<div class="dashboard-container">
+  
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="content">
+      
+      <form [formGroup]="accountsreceivablecreateform" (ngSubmit)="onSubmit()" class="form-container">
+
+        <div class="main-field-group">
+          <label>Cliente Selecionado</label>
+          <div class="display-input-group">
+            <input 
+              type="text" 
+              formControlName="customerName" 
+              readonly 
+              placeholder="Clique em buscar para selecionar">
+            
+            <button type="button" class="btn-search" (click)="showModal = true">
+              🔍 Buscar
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="document">Documento</label>
+          <input id="document" type="text" formControlName="document" placeholder="Ex: Teste4">
+        </div>
+
+        <div class="field-group">
+          <label for="destit">Descrição</label>
+          <input id="destit" type="text" formControlName="destit" placeholder="Ex: Teste descricao">
+        </div>
+
+        <div class="field-group">
+          <label for="originalValue">Valor Original</label>
+          <input id="originalValue" type="number" formControlName="originalValue" placeholder="0.00">
+        </div>
+
+        <div class="field-group">
+          <label for="originalDueDate">Data de Vencimento</label>
+          <input id="originalDueDate" type="date" formControlName="originalDueDate">
+        </div>
+
+        <button type="submit" [disabled]="!accountsreceivablecreateform.valid" class="btn-submit">
+          Salvar Título
+        </button>
+
+        <div class="modal-overlay" *ngIf="showModal">
+          <div class="modal-card">
+            <div class="modal-header">
+              <h3>Buscar Cliente</h3>
+              <button type="button" class="btn-close" (click)="showModal = false">✕</button>
+            </div>
+            <div class="modal-body">
+              <input 
+                type="text" 
+                placeholder="Digite o nome, e-mail ou CPF/CNPJ..."
+                (input)="onSearchCustomer($event)" 
+                class="modal-input"
+                autocomplete="off">
+
+              <ul class="modal-results" *ngIf="customers.length > 0">
+                <li *ngFor="let customer of customers" (click)="selectCustomer(customer)">
+                  <div class="customer-info">
+                    <span class="name">{{ customer.name }}</span>
+                    <span class="details">{{ customer.documentCode }} - {{ customer.email }}</span>
+                  </div>
+                  <button type="button" class="btn-select-item">Selecionar</button>
+                </li>
+              </ul>
+              <p *ngIf="customers.length === 0" class="no-results">Nenhum cliente encontrado.</p>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </main>
+</div>

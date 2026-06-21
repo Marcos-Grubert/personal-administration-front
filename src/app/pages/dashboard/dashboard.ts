@@ -1,26 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CommonModule } from '@angular/common';
+// Importe o SidebarComponent com o caminho correto do seu projeto
+import { SidebarComponent } from '../../core/components/sidebar/sidebar';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, SidebarComponent], 
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
 export class DashboardComponent implements OnInit {
   userName: string = 'Desenvolvedor';
-  
-  // Nível 1
-  menuCadastros: boolean = false;
-  menuFinancas: boolean = false;
-
-  // Nível 2 (Aninhados)
-  subMenuReceber: boolean = false;
-  subMenuPagar: boolean = false;
-  subMenuUsuarios: boolean = false; // Novo controle
 
   constructor(private authService: AuthService, private router: Router) {}
 
