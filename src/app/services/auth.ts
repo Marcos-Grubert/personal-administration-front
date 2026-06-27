@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   // URL da sua API (ex: Spring Boot rodando no 8080)
-  private readonly API_URL = 'http://localhost:8080/auth/login';
+  private readonly API_URL = 'https://personal-administration.onrender.com:8080/auth/login';
 
   constructor(private http: HttpClient) {}
 
