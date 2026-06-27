@@ -8,7 +8,7 @@ import { User } from '../../../../pages/register/users/models/user'
 })
 export class UserService {
   // Sua URL do backend
-  private readonly API = 'http://localhost:8080/register/users';
+  private readonly API = 'https://personal-administration.onrender.com:8080/register/users';
 
   constructor(private http: HttpClient) { }
 

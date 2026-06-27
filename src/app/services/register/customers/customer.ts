@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root',
 })
 export class CustomerService {
-  private apiUrl = "http://localhost:8080/register/costumers/";
+  private apiUrl = "https://personal-administration.onrender.com:8080/register/costumers/";
 
   constructor(private http: HttpClient){}
 

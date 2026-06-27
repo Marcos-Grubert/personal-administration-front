@@ -1,79 +1,79 @@
 <div class="dashboard-container">
   <app-sidebar></app-sidebar>
-
   <main class="main-content">
     <div class="content">
       <h2>Baixa de Contas à Receber</h2>
-      <p class="subtitle">Selecione os títulos, defina o tipo de baixa e confirme a liquidação.</p>
-
-      <div class="filter-container animate-fade">
+      
+      <div class="filter-container">
         <form [formGroup]="filterForm" (ngSubmit)="searchTitles()" class="filter-form">
-          
           <div class="filter-group">
             <label>Cliente</label>
-            <select formControlName="customerId" class="form-control">
-              <option [ngValue]="null">Todos os Clientes</option>
-              <option *ngFor="let c of customers" [value]="c.id">{{ c.name }}</option>
-            </select>
-          </div>
+            <div class="autocomplete-container" style="position: relative; display: flex; align-items: center;">
+              <input type="text" 
+                     [value]="selectedCustomerName" 
+                     (input)="onSearchCustomer($event)" 
+                     (focus)="showPanel = true" 
+                     class="form-control" 
+                     placeholder="Digite para buscar...">
+              
+              <button type="button" 
+                      *ngIf="selectedCustomerName" 
+                      (click)="clearCustomerFilter()" 
+                      style="position: absolute; right: 10px; border: none; background: none; cursor: pointer; color: #999;">
+                ✕
+              </button>
 
-          <div class="filter-group">
-            <label>Data Inicial</label>
-            <input type="date" formControlName="startDate" class="form-control">
+              <ul *ngIf="showPanel && customers.length > 0" 
+                  style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; background: white; border: 1px solid #ccc; list-style: none; padding: 0; max-height: 200px; overflow-y: auto;">
+                <li *ngFor="let c of customers" 
+                    (click)="selectCustomer(c)" 
+                    style="padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;">
+                  {{ c.name }}
+                </li>
+              </ul>
+            </div>
           </div>
-
-          <div class="filter-group">
-            <label>Data Final</label>
-            <input type="date" formControlName="endDate" class="form-control">
-          </div>
-
+          
+          <div class="filter-group"><label>Data Inicial</label><input type="date" formControlName="startDate" class="form-control"></div>
+          <div class="filter-group"><label>Data Final</label><input type="date" formControlName="endDate" class="form-control"></div>
+          
           <button type="submit" class="btn-filter" [disabled]="!filterForm.valid">🔍 Filtrar</button>
         </form>
       </div>
 
-      <div class="table-container animate-fade" *ngIf="openTitles.length > 0">
+      <div class="table-container" *ngIf="openTitles.length > 0">
         <table class="custom-table">
           <thead>
             <tr>
               <th><input type="checkbox" (change)="toggleAll($event)"></th>
-              <th>Documento</th>
-              <th>Cliente</th>
-              <th>Saldo</th>
-              <th>Tipo de Baixa</th>
-              <th>Valor (R$)</th>
+              <th>Documento</th><th>Cliente</th><th>Saldo</th><th>Tipo</th><th>Valor</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let title of openTitles">
               <td><input type="checkbox" [(ngModel)]="title.selected"></td>
-              <td><strong>{{ title.id.document }}</strong></td>
+              <td>{{ title.id.document }}</td>
               <td>{{ title.customerName }}</td>
-              <td class="text-danger"><strong>{{ title.remainingValue | currency: 'BRL' }}</strong></td>
-              
+              <td>{{ title.remainingValue | currency: 'BRL' }}</td>
               <td>
-              <select [(ngModel)]="title.movementType" (change)="onTipoChange(title)">
-                <option [value]="1">Baixa</option>
-                <option [value]="3">Cancelamento</option>
-              </select>
-            </td>
-
-            <td>
-              <input type="number" 
-                    [(ngModel)]="title.lowValue" 
-                    class="input-valor">
-            </td>
+                <select [(ngModel)]="title.movementType" (change)="onTipoChange(title)">
+                  <option [value]="1">Baixa</option>
+                  <option [value]="3">Cancelamento</option>
+                </select>
+              </td>
+              <td><input type="number" [(ngModel)]="title.lowValue" class="input-valor" style="width: 100px;"></td>
             </tr>
           </tbody>
         </table>
-
-        <div class="action-footer" style="margin-top: 20px; text-align: right;">
-          <button type="button" class="btn-save" (click)="processarBaixas()" style="padding: 10px 25px; cursor: pointer;">
-            Confirmar Baixas em Lote
-          </button>
+        
+        <div style="margin-top: 20px; text-align: right;">
+          <button type="button" class="btn-save" (click)="processarBaixas()" style="padding: 10px 20px;">Confirmar Baixas</button>
         </div>
       </div>
 
-      <p *ngIf="openTitles.length === 0" class="no-data">Nenhum título pendente encontrado.</p>
+      <div *ngIf="openTitles.length === 0" style="padding: 20px; text-align: center; color: #666;">
+        Nenhum título encontrado.
+      </div>
     </div>
   </main>
 </div>

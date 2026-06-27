@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SidebarComponent } from '../../../../core/components/sidebar/sidebar';
 import { AccountsReceivableService } from '../../../../services/financial/accountsreceivable/accounts-receivable';
 import { CustomerService } from '../../../../services/register/customers/customer';
 import { ReceivableMovementService } from '../../../../services/financial/accountsreceivable/accounts-receivable-movements';
+import { Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-accounts-receivable-movements',
@@ -17,6 +19,10 @@ export class AccountsReceivableMovementsComponent implements OnInit {
   filterForm!: FormGroup;
   openTitles: any[] = [];
   customers: any[] = [];
+  
+  private searchTerms = new Subject<string>();
+  showPanel = false;
+  selectedCustomerName = '';
 
   constructor(
     private fb: FormBuilder,
@@ -25,22 +31,65 @@ export class AccountsReceivableMovementsComponent implements OnInit {
     private receivableMovementService: ReceivableMovementService
   ) {}
 
+  // Fecha o painel se clicar fora do container de busca
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.autocomplete-container')) {
+      this.showPanel = false;
+    }
+  }
+
   ngOnInit(): void {
     this.filterForm = this.fb.group({
       startDate: ['2026-06-01', Validators.required],
       endDate: ['2026-06-30', Validators.required],
       customerId: [null]
     });
-    
-    this.loadCustomers('');
+
+    this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term: string) => {
+        return this.customerService.searchCustomersForTerm(term).pipe(
+          catchError(err => {
+            console.error('Erro ao buscar clientes:', err);
+            return of({ content: [] }); 
+          })
+        );
+      })
+    ).subscribe((data: any) => {
+      this.customers = data.content || [];
+      this.showPanel = this.customers.length > 0;
+    });
+
     this.searchTitles();
   }
 
-  loadCustomers(term: string): void {
-    this.customerService.searchCustomersForTerm(term).subscribe({
-      next: (data) => this.customers = data,
-      error: (err) => console.error('Erro ao buscar clientes:', err)
-    });
+  onSearchCustomer(event: any): void {
+    const term = event.target.value;
+    this.searchTerms.next(term);
+    
+    if (!term || term.trim() === '') {
+      this.clearCustomerFilter();
+    }
+  }
+
+  selectCustomer(customer: any): void {
+    this.selectedCustomerName = customer.name;
+    this.filterForm.patchValue({ customerId: customer.id });
+    this.showPanel = false;
+    this.customers = [];
+    // Opcional: dispara a busca automaticamente ao selecionar
+    this.searchTitles();
+  }
+
+  clearCustomerFilter(): void {
+    this.selectedCustomerName = '';
+    this.filterForm.patchValue({ customerId: null });
+    this.customers = [];
+    this.showPanel = false;
+    this.searchTitles();
   }
 
   searchTitles(): void {
@@ -51,7 +100,7 @@ export class AccountsReceivableMovementsComponent implements OnInit {
           this.openTitles = (data.content || []).map((t: any) => ({
             ...t, 
             selected: false, 
-            movementType: 1, // Default para Baixa
+            movementType: 1, 
             lowValue: t.remainingValue
           }));
         },
@@ -61,7 +110,6 @@ export class AccountsReceivableMovementsComponent implements OnInit {
   }
 
   onTipoChange(item: any): void {
-    // Sugere valor total ao trocar o tipo de operação
     item.lowValue = item.remainingValue;
   }
 
@@ -72,9 +120,8 @@ export class AccountsReceivableMovementsComponent implements OnInit {
 
   processarBaixas(): void {
     const selecionados = this.openTitles.filter(t => t.selected);
-    
     if (selecionados.length === 0) {
-      alert('Selecione pelo menos um título para processar.');
+      alert('Selecione pelo menos um título.');
       return;
     }
 
@@ -93,10 +140,7 @@ export class AccountsReceivableMovementsComponent implements OnInit {
         alert('Baixas processadas com sucesso!');
         this.searchTitles();
       },
-      error: (err) => {
-        console.error('Erro ao processar baixas:', err);
-        alert('Erro ao processar as baixas. Verifique o console.');
-      }
+      error: (err) => console.error('Erro:', err)
     });
   }
 }
