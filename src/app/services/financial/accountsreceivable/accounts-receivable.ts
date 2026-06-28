@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AccountsReceivableService {
-  private apiUrl = 'https://personal-administration.onrender.com:8080/financial/receivables'; 
+  private apiUrl = 'https://personal-administration.onrender.com/financial/receivables'; 
 
   constructor(private http: HttpClient) {}
 

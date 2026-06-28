@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ReceivableMovementService {
   // A URL base agora reflete o caminho dos movimentos
-  private baseUrl = 'https://personal-administration.onrender.com:8080/financial/receivables/movements'; 
+  private baseUrl = 'https://personal-administration.onrender.com/financial/receivables/movements'; 
 
   constructor(private http: HttpClient) {}
 
